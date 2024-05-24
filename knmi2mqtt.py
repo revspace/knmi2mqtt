@@ -17,7 +17,7 @@ fields = [
   ('humidity', 'rh', '%'),
 ]
 
-dtNow = datetime.datetime.utcnow()
+dtNow = datetime.datetime.now(datetime.UTC)
 dtSearch = dtNow - datetime.timedelta(minutes = 20 + dtNow.minute % 10)
 
 session = requests.Session()
@@ -50,7 +50,7 @@ assert dataset.variables['time'].units == 'seconds since 1950-01-01 00:00:00', f
 
 # so, we're dealing with a 1950-01-01 epoch. Let's convert it to a unix timestamp
 # there are 5 leap years between those epochs: '52, '56, '60, '64, and '68
-dt = datetime.datetime.utcfromtimestamp(dataset.variables['time'][:][0] - (20*365 + 5) * 24*60*60)
+dt = datetime.datetime.fromtimestamp(dataset.variables['time'][:][0] - (20*365 + 5) * 24*60*60, datetime.UTC)
 
 msgs = []
 
