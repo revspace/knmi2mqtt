@@ -18,7 +18,7 @@ fields = [
 ]
 
 dtNow = datetime.datetime.now(datetime.UTC)
-dtSearch = dtNow - datetime.timedelta(minutes = 20 + dtNow.minute % 10)
+dtSearch = dtNow - datetime.timedelta(minutes = 60)
 
 session = requests.Session()
 session.headers.update({'Authorization': api_key})
@@ -29,7 +29,12 @@ files = session.get(f"{api_base_url}/Actuele10mindataKNMIstations/versions/2/fil
   'startAfterFilename': f"KMDS__OPER_P___10M_OBS_L2_{dtSearch:%Y%m%d%H%M}.nc"
 })
 
-fileName = files.json()['files'][-1]['filename']
+# sometimes they publish files with incorrect filenames (suggesting future timestamps) and weird irregular creation times
+# so this explicit sorting is required (and assumes the "created" timestamps are always correct and in the rigt order
+# which the timestamps in the filenames aren't. fun!)
+probably_the_right_file_if_knmi_hasnt_screwed_up_today = sorted(files.json()['files'], key=lambda d: d['created'])[-1]
+
+fileName = probably_the_right_file_if_knmi_hasnt_screwed_up_today['filename']
 fileMetadata = session.get(f"{api_base_url}/Actuele10mindataKNMIstations/versions/2/files/{fileName}/url")
 
 rlRemaining = fileMetadata.headers['X-Ratelimit-Remaining']
@@ -38,7 +43,7 @@ rlReset = datetime.datetime.fromtimestamp(int(fileMetadata.headers['X-Ratelimit-
 
 print(f"Ratelimit stats: {rlRemaining}/{rlLimit} remaining (resets at {rlReset})")
 
-print(f"Found {fileName}, last modified at {files.json()['files'][-1]['lastModified']}, starting download...")
+print(f"Found {fileName}, last modified at {probably_the_right_file_if_knmi_hasnt_screwed_up_today['lastModified']}, starting download...")
 
 theFile = requests.get(fileMetadata.json()['temporaryDownloadUrl'])
 
