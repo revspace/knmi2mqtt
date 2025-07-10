@@ -30,7 +30,7 @@ files = session.get(f"{api_base_url}/Actuele10mindataKNMIstations/versions/2/fil
 })
 
 # sometimes they publish files with incorrect filenames (suggesting future timestamps) and weird irregular creation times
-# so this explicit sorting is required (and assumes the "created" timestamps are always correct and in the rigt order
+# so this explicit sorting is required (and assumes the "created" timestamps are always correct and in the right order
 # which the timestamps in the filenames aren't. fun!)
 probably_the_right_file_if_knmi_hasnt_screwed_up_today = sorted(files.json()['files'], key=lambda d: d['created'])[-1]
 
