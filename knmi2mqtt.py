@@ -8,7 +8,7 @@ import requests, datetime, netCDF4, paho.mqtt.publish
 weather_stations = [6330, 6344, 6215]
 # anonymous key, valid until 1 July 2024 (possibly unoficially longer?)
 # get a new one at https://developer.dataplatform.knmi.nl/open-data-api#token
-api_key = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImE1OGI5NGZmMDY5NDRhZDNhZjFkMDBmNDBmNTQyNjBkIiwiaCI6Im11cm11cjEyOCJ9"
+api_key = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImVlNDFjMWI0MjlkODQ2MThiNWI4ZDViZDAyMTM2YTM3IiwiaCI6Im11cm11cjEyOCJ9"
 api_base_url = "https://api.dataplatform.knmi.nl/open-data/v1/datasets"
 
 fields = [
