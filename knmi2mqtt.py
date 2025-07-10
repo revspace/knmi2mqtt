@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/python3
 
 import requests, datetime, netCDF4, paho.mqtt.publish
 
